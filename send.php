@@ -15,7 +15,7 @@ $url="https://github.com/login/oauth/access_token";
     $response = curl_exec($curl);
     curl_close($curl);
     $token=$response;
-    //better written for the string accestoken=xxxx&scopes=xxxx&.... into an array with keys and values
+    //turn the string accestoken=xxxx&scopes=xxxx&.... into an array with keys and values
 $token=explode('&',$token);
 foreach ($token as $key => $value) {
 $token[$key]=explode('=',$token[$key]);
@@ -27,16 +27,15 @@ if(!isset($token["access_token"])){
   http_response_code(401);
 }
 else{
-  //you have now acces token you can send request to github token
+  //you have now acces token you can send request to github with that token
 $headers=['Authorization:Bearer '.$token["access_token"],'user-agent: send.php'];
 $curl = curl_init("https://api.github.com/user");
 curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 $output=curl_exec($curl);
 curl_close($curl);
-print_r($output);
-// $output2=json_decode($output);
-// echo json_encode(['name'=>$output2->{'login'},'avatr'=>$output2->{'avatar_url'}]);
+echo json_encode($output);
+
 }
 
 
